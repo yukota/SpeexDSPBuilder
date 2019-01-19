@@ -1,8 +1,8 @@
 language: julia
 os:
-  - linux
+- linux
 julia:
-  - 1.0
+- 1.0
 notifications:
   email: false
 git:
@@ -10,17 +10,23 @@ git:
 cache:
   timeout: 1000
   directories:
-    - downloads
+  - downloads
 env:
   global:
-    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
-    - BINARYBUILDER_AUTOMATIC_APPLE=false
+  - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+  - BINARYBUILDER_AUTOMATIC_APPLE=false
 sudo: required
-
-# Before anything else, get the latest versions of things
 before_script:
-  - julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
-
+- julia -e 'using Pkg; pkg"add BinaryProvider"; pkg"add BinaryBuilder#master"; Pkg.build()'
 script:
-  - julia build_tarballs.jl
-
+- julia build_tarballs.jl
+deploy:
+  provider: releases
+  api_key:
+    secure: INggKN/cqbfqFSPpcQZUcmY7AG4fBqXbD12ms3yEcoobdYlRPdfnFrllrIildTh3m91PGaHkWltGdOdIrl4PfvIjoB3/QPNKLARj/pD+KIqgIPBuwjYVLPQJASD5eY6Sy6Gmylc180Dn9dGKA0JpSSLCNZ3qlApUlbVbUei6/d39l0LSOAQ2XP7UIynTMiTmeffh/+mgWGdr90pCvU8ZI1aOsuCLv87WUen/W0NimATC5jb+3uKz6IptojTQdTBcMlYY7/InPDxAV5PFOB/ylAy2i4aHenYuoh1dAWLAQsLbg253drSSe4T2jTzI7+sI/0+QNq4G7bElypL12ptHFPoxCeW9qDpKuj5Y9Uwk+BN4yg6DyZz4QhkEE4HQheCoeZ3n9lll3okY32TfUkOkTK2yaayIQafavBtOCkArCG5c3hDOThWZVSKEHGOod+dbL6WGugDGjHrHZ3/OfWZQIzGxo0blBVe4yRJwo41weZvLafMIj/gFWI4iacxdutTfuG3bj20/L2Tgd+T4EzwWXzSMWPiiIxs6gYuZ5hTH0A1V0hgIu18n9fba9pQnLRN5Wp5xigO8g/HWeqZ2Ju/pI9cd8HOLm+x93S5+uNMj3pC1jDEfh+7Pnma2MP/KKMFUqRomuhq6c1FI2DIBBZGMSCYIzlhWV3Ruj8buHiNJlXo=
+  file_glob: true
+  file: products/*
+  skip_cleanup: true
+  on:
+    repo: yukota/SpeexDSPBuilder
+    tags: true
